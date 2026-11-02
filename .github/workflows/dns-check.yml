@@ -20,3 +20,6 @@ jobs:
           done
           echo "== AAAA"; dig +short AAAA kaplunfinancial.com @8.8.8.8
           echo "== CAA"; dig +short CAA kaplunfinancial.com @8.8.8.8
+          echo "== HTTP root"; curl -sI http://kaplunfinancial.com | head -5
+          echo "== HTTP www"; curl -sI http://www.kaplunfinancial.com | head -5
+          echo "== HTTPS root"; curl -sI https://kaplunfinancial.com 2>&1 | head -5
