@@ -88,7 +88,7 @@ PAGES["index"] = ("Tax, Bookkeeping & Business Services | Tukwila, WA & All 50 S
 <div class="wrap hero-grid"><div class="hero-copy">
 <span class="pill-badge"><span class="dot"></span>Based in {CITY} &middot; Serving all 50 states</span>
 <h1>Taxes, business setup and books, <span class="grad">handled.</span></h1>
-<p class="hero-lead">Kaplun Financial Group files every type of tax return, opens and licenses new companies, keeps your books and insures your business, all with one team. Based in {CITY} and working with clients in all 50 states.</p>
+<p class="hero-lead">Kaplun Financial Group files every type of tax return, opens and licenses new companies, keeps your books and insures your business, all with one team.<span class="m-hide"> Based in {CITY} and working with clients in all 50 states.</span></p>
 <div class="btns"><a class="btn" href="contact.html">Book a consultation <span class="arr">&rarr;</span></a><a class="btn glass" href="services.html">Explore services</a></div>
 <div class="hero-tags"><span class="tag-us">All 50 states</span><span>1040</span><span>Schedule C</span><span>1065</span><span>S corp</span><span>C corp</span><span>LLC formation</span></div>
 </div>
