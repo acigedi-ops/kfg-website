@@ -336,6 +336,8 @@ exec(open(os.path.join(ROOT, "growth.py")).read())
 
 # ---------------------------------------------------------------- layout
 CSS = open(os.path.join(ROOT, "src", "styles.css")).read()
+import hashlib
+CSS_VER = hashlib.md5(CSS.encode()).hexdigest()[:8]  # cache-buster: browsers fetch new CSS after every change
 
 def nav_html(active):
     items = ""
@@ -384,9 +386,9 @@ def build_site():
     open(os.path.join(out, "styles.css"), "w").write(CSS)
     for slug, (title, body) in PAGES.items():
         body = body.replace('src="LOGO_DARK"', 'src="img/kfg-logo-dark-bg.png"')
-        html = layout(slug, title, body, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
+        html = layout(slug, title, body, "img/kfg-logo.png", f'<link rel="stylesheet" href="styles.css?v={CSS_VER}">', "img/kfg-logo-dark-bg.png") + SITE_JS
         open(os.path.join(out, f"{slug}.html"), "w").write(html)
-    nf = layout("404", "Page not found", NOT_FOUND, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
+    nf = layout("404", "Page not found", NOT_FOUND, "img/kfg-logo.png", f'<link rel="stylesheet" href="styles.css?v={CSS_VER}">', "img/kfg-logo-dark-bg.png") + SITE_JS
     nf = nf.replace('<meta name="robots" content="index,follow,max-image-preview:large">', '<meta name="robots" content="noindex">')
     nf = re.sub(r'(href|src)="(?!https?:|tel:|mailto:|#|/)([^"]+)"', r'\1="/\2"', nf)  # 404 can be served at any path
     open(os.path.join(out, "404.html"), "w").write(nf)
@@ -404,6 +406,7 @@ def build_preview():
         head, rest = full.split("<body>", 1)
         if shell is None:
             shell = head
+        rest = re.sub(r'href="#(start|tool-list)"', r'href="javascript:void(0)" data-scroll="\1"', rest)
         rest = re.sub(r'href="([a-z-]+)\.html"', lambda m: f'href="#{"home" if m.group(1)=="index" else m.group(1)}"', rest)
         pid = "home" if slug == "index" else slug
         pages_html += f'<div class="pv-page" data-page="{pid}" data-title="{_html.escape(page_title(slug, title), quote=True)}" hidden>{rest}</div>\n'
@@ -411,7 +414,7 @@ def build_preview():
 function show(){var id=(location.hash||'#home').slice(1);var pg=document.querySelector('[data-page="'+id+'"]')||document.querySelector('[data-page="home"]');
 document.querySelectorAll('.pv-page').forEach(function(p){p.hidden=p!==pg});document.title=pg.dataset.title;window.scrollTo({top:0,behavior:'instant'});}
 window.addEventListener('hashchange',show);show(); (function(){document.querySelectorAll('.hero-lines').forEach(function(c){var x=c.getContext('2d');function d(){var r=c.parentNode.getBoundingClientRect();if(!r.width)return;var dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,r.width,r.height); x.lineWidth=1;for(var i=0;i<22;i++){var off=i*34;x.strokeStyle='rgba(91,150,235,'+(0.05+0.18*(1-i/22))+')';x.beginPath();x.moveTo(r.width*0.52-off,r.height+20);x.lineTo(r.width*0.80-off*0.15,r.height*0.18+i*6);x.lineTo(r.width+40,r.height*0.48+i*14);x.stroke();}} d();window.addEventListener('resize',d);c._draw=d;});})(); window.addEventListener('hashchange',function(){document.querySelectorAll('.hero-lines').forEach(function(c){c._draw&&c._draw()})});
-document.addEventListener('click',function(e){var b=e.target.closest('.menu-btn');if(b){var o=document.body.classList.toggle('nav-open');b.setAttribute('aria-expanded',o);}
+document.addEventListener('click',function(e){var j=e.target.closest('[data-scroll]');if(j){var t=j.closest('.pv-page').querySelector('#'+j.dataset.scroll);if(t)t.scrollIntoView({behavior:'smooth'});return;}var b=e.target.closest('.menu-btn');if(b){var o=document.body.classList.toggle('nav-open');b.setAttribute('aria-expanded',o);}
 if(e.target.closest('.menu a')){document.body.classList.remove('nav-open');}});
 document.querySelectorAll('.year').forEach(function(e){e.textContent=new Date().getFullYear()});
 document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var n=f.querySelector('.form-note');

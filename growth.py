@@ -384,9 +384,9 @@ def tools_hub2():
     return f'''<section class="page-head split-head"><div class="glow g1"></div><div class="gridbg"></div>
 <div class="wrap ph-grid"><div><span class="pill-badge"><span class="dot"></span>Free, no sign-up</span><h1>Free tax and business tools</h1>
 <p class="lead">Calculators, a quiz and a printable checklist built by our team. Run the numbers yourself, then call us when you want a professional to look at your situation.</p>
-<div class="btns"><a class="btn" href="#tools">See the tools <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Call {PHONE}</a></div></div>
+<div class="btns"><a class="btn" href="#tool-list">See the tools <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Call {PHONE}</a></div></div>
 <div class="ph-visual">{vis}</div></div></section>''' + perks_strip() + f'''
-<section id="tools"><div class="wrap"><div class="sec-head"><span class="kicker">Tools</span><h2>Pick a tool</h2></div><div class="tool-grid">{cards}</div></div></section>
+<section id="tool-list"><div class="wrap"><div class="sec-head"><span class="kicker">Tools</span><h2>Pick a tool</h2></div><div class="tool-grid">{cards}</div></div></section>
 <section class="soft"><div class="wrap"><div class="sec-head"><span class="kicker">Who they're for</span><h2>Built for people who run their own business</h2></div><div class="grid g3">{wc}</div></div></section>
 <section><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">Questions</span><h2>About these tools</h2></div>{faq_list(HUB_FAQ)}</div></section>''' + cta("Want real numbers, not estimates?", "Book a consultation and we'll run your actual situation.")
 PAGES["tools"] = ("Free tools", tools_hub2())
