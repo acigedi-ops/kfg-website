@@ -178,9 +178,28 @@ META.update({
 for s, t, _, _ in TOOLS:
     CRUMBS[s] = [("Free tools", "tools"), (t, s)]
 
+def vis_card(title, rows):
+    r = "".join(f'<div class="vrow"><span class="vk">{k}</span><span>{v}</span><span class="vchk"></span></div>' for k, v in rows)
+    return f'<div class="vcard"><p class="vtitle">{title}</p>{r}</div>'
+
+TOOL_VIS = {
+ "S Corp Tax Savings Calculator": vis_card("Example: $100k profit, $50k salary, married", [("LLC", "Total federal tax $19,465"), ("S corp", "Total federal tax $13,761"), ("Saved", "About $5,700 a year")]),
+ "Quarterly Estimated Tax Calculator": vis_card("2026 estimated tax due dates", [("Q1", "April 15, 2026"), ("Q2", "June 15, 2026"), ("Q3", "September 15, 2026"), ("Q4", "January 15, 2027")]),
+ "Which business structure fits you?": vis_card("Possible results", [("LLC", "Single-member LLC"), ("S corp", "LLC taxed as an S corp"), ("2+", "Multi-member LLC"), ("C corp", "C corporation")]),
+ "Tax document checklist": vis_card("5 sections, 35 items", [("ID", "Everyone on the return"), ("1099", "Income forms"), ("1098", "Deductions &amp; credits"), ("Sch C", "Self-employed"), ("K-1", "Partnerships &amp; corporations")]),
+}
+
+PERKS = [("100% free", "No sign-up, no email required to use it"), ("Updated for 2026", "Current IRS brackets, limits and dates"), ("Private", "Your numbers stay in your browser")]
+def perks_strip():
+    ic = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
+    return '<section class="perks-sec"><div class="wrap"><div class="perks">' + "".join(f'<div class="perk"><span class="perk-ico">{ic}</span><div><strong>{t}</strong><span>{d}</span></div></div>' for t, d in PERKS) + '</div></div></section>'
+
 def tool_head(title, lead, kicker="Free tool"):
-    return f'''<section class="page-head"><div class="glow g1"></div><div class="gridbg"></div><div class="wrap">
-<p class="crumb"><a href="tools.html">Free tools</a> / {title}</p><span class="pill-badge"><span class="dot"></span>{kicker}</span><h1>{title}</h1><p class="lead">{lead}</p></div></section>'''
+    vis = TOOL_VIS.get(title, "")
+    return f'''<section class="page-head split-head"><div class="glow g1"></div><div class="gridbg"></div>
+<div class="wrap ph-grid"><div><p class="crumb"><a href="tools.html">Free tools</a> / {title}</p><span class="pill-badge"><span class="dot"></span>{kicker}</span><h1>{title}</h1><p class="lead">{lead}</p>
+<div class="btns"><a class="btn" href="#start">Start now <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Ask a pro: {PHONE}</a></div></div>
+<div class="ph-visual">{vis}</div></div></section>''' + perks_strip()
 
 DISCLAIM = '<p class="tool-fine">Estimates for general information only, not tax advice. Your actual numbers depend on your full situation.</p>'
 
@@ -191,7 +210,7 @@ def tools_hub():
 
 def scorp_page():
     return tool_head("S Corp Tax Savings Calculator", "If your business makes a solid profit, electing S corp status can cut your total tax. Compare a standard LLC with an S corp using 2026 federal rates, including the Section 199A (QBI) deduction.") + f"""
-<section><div class="wrap tool-wrap"><div class="tool-in">
+<section id="start"><div class="wrap tool-wrap"><div class="tool-in">
 <div class="row2"><div><label for="sc-status">Filing status</label><select id="sc-status"><option value="s">Single</option><option value="m">Married filing jointly</option></select></div>
 <div><label for="sc-type">Type of business</label><select id="sc-type"><option value="n">Standard business</option><option value="sstb">Professional service (SSTB)</option></select></div></div>
 <div><label for="sc-profit">Expected net business profit for the year</label><input id="sc-profit" type="number" inputmode="numeric" min="0" step="1000" value="100000"></div>
@@ -231,7 +250,7 @@ $('sc-msg').textContent=v>=2000?'Worth looking into: an S corp could save you mo
 
 def esttax_page():
     return tool_head("Quarterly Estimated Tax Calculator", "Self-employed or own a pass-through business? Estimate what you may owe the IRS for 2026 and what each quarterly payment should be.") + f'''
-<section><div class="wrap tool-wrap"><div class="tool-in">
+<section id="start"><div class="wrap tool-wrap"><div class="tool-in">
 <div><label for="et-status">Filing status</label><select id="et-status"><option value="s">Single</option><option value="m">Married filing jointly</option></select></div>
 <div><label for="et-profit">Expected net self-employment profit for 2026</label><input id="et-profit" type="number" inputmode="numeric" min="0" step="1000" value="80000"></div>
 <div><label for="et-other">Other income (W-2 wages, interest, etc.)</label><input id="et-other" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
@@ -264,7 +283,7 @@ def quiz_page():
                  "".join(f'<label class="pk"><input type="radio" name="qz-{k}" value="{v}"><span>{l}</span></label>' for v, l in opts) + '</div></fieldset>'
                  for i, (k, q, opts) in enumerate(QUIZ))
     return tool_head("Which business structure fits you?", "Answer three quick questions to see which structure may fit: single-member LLC, S corp, multi-member LLC or C corp. Takes under a minute.", "Free quiz") + f'''
-<section><div class="wrap tool-wrap"><div class="tool-in qz">{qs}{DISCLAIM.replace("tax advice", "legal or tax advice")}</div>
+<section id="start"><div class="wrap tool-wrap"><div class="tool-in qz">{qs}{DISCLAIM.replace("tax advice", "legal or tax advice")}</div>
 <div class="tool-out" id="qz-out"><div class="glow g1"></div><p class="to-k">Your likely fit</p><p class="to-big sm" id="qz-r">Answer the questions</p><p class="to-msg" id="qz-why">Your result will appear here as you answer.</p>
 <div class="to-rows" id="qz-forms" hidden><div><span>Tax return you would file</span><strong id="qz-f">&nbsp;</strong></div></div>
 <a class="btn" href="business-formation.html">Form your company with KFG <span class="arr">&rarr;</span></a></div></div></section>
@@ -291,7 +310,7 @@ CHECK = [
 def checklist_page():
     cols = "".join(f'<div class="ck-col"><h2 class="h-sm">{h}</h2><ul class="ck">' + "".join(f'<li><label><input type="checkbox"><span>{x}</span></label></li>' for x in items) + '</ul></div>' for h, items in CHECK)
     return tool_head("Tax document checklist", "Everything to gather before your personal or business tax return, in one printable list. Check items off as you go, then print it or save it as a PDF.", "Free printable") + f'''
-<section><div class="wrap"><div class="ck-bar"><button class="btn" type="button" onclick="window.print()">Print or save as PDF</button><span class="muted">Tip: on your phone, use Share &rarr; Print to save a PDF.</span></div>
+<section id="start"><div class="wrap"><div class="ck-bar"><button class="btn" type="button" onclick="window.print()">Print or save as PDF</button><span class="muted">Tip: on your phone, use Share &rarr; Print to save a PDF.</span></div>
 <div class="ck-grid">{cols}</div></div></section>
 <section class="soft no-print"><div class="wrap narrow">{lead_box("Tax document checklist", "Send me my personalized checklist", "Tell us a little about you and we will email a checklist tailored to your return, plus a reminder before the deadline.", "Email my checklist")}</div></section>''' + cta()
 
@@ -300,6 +319,79 @@ PAGES["s-corp-calculator"] = ("S Corp Tax Savings Calculator", scorp_page())
 PAGES["estimated-tax-calculator"] = ("Quarterly Estimated Tax Calculator", esttax_page())
 PAGES["business-structure-quiz"] = ("Business Structure Quiz", quiz_page())
 PAGES["tax-document-checklist"] = ("Tax Document Checklist", checklist_page())
+
+# ---- richer tool pages: how-to steps, FAQs, related service and tools
+TOOL_EXTRA = {
+ "s-corp-calculator": (
+  [("Enter your profit", "Use your expected net profit for the year, after business expenses."), ("Set a reasonable salary", "What you'd pay someone else to do your job. The IRS expects it to be realistic."), ("Compare the totals", "See total federal tax as a standard LLC and as an S corp, side by side.")],
+  [("What counts as a reasonable salary?", "Roughly what you would pay someone else to do the work you do, based on your duties, hours, experience and industry. Setting it too low to save payroll tax is a common audit trigger, so we help clients set and document a defensible number."),
+   ("When do I have to elect S corp status?", "File Form 2553 within 2 months and 15 days of the start of the tax year you want it to apply to. For most businesses that means by March 15. If you missed it, the IRS often grants late election relief, and we can file for it."),
+   ("Do I need to form a new company?", "No. Your existing LLC simply elects to be taxed as an S corporation. It keeps the same name, EIN and liability protection; only the way it's taxed changes."),
+   ("Why does the QBI deduction get smaller with an S corp?", "The Section 199A deduction is 20% of qualified business income, and the salary you pay yourself is not QBI. So moving profit into salary trims the deduction a little. The calculator includes this.")],
+  "tax-planning", "Want a full S corp analysis, including your state, health insurance and retirement plan? That's part of our tax planning."),
+ "estimated-tax-calculator": (
+  [("Pick your filing status", "Single or married filing jointly."), ("Enter your income", "Your expected self-employment profit, other income and any tax withheld from paychecks."), ("Pay each quarter", "Pay the quarterly amount by each due date through IRS Direct Pay or your IRS online account.")],
+  [("Who has to pay estimated taxes?", "Generally anyone who expects to owe $1,000 or more for the year after withholding and credits. That includes most self-employed people, freelancers, gig workers and business owners whose pay isn't withheld."),
+   ("What happens if I miss a payment?", "The IRS charges an underpayment penalty, figured separately for each quarter, much like interest. Paying late is still better than not paying; the penalty stops growing once the payment is made."),
+   ("How can I avoid the penalty?", "Pay at least 90% of this year's tax, or 100% of last year's tax (110% if last year's adjusted gross income was over $150,000), spread over the four due dates."),
+   ("How do I make the payments?", "Online through IRS Direct Pay, EFTPS or your IRS online account, or by mail with a Form 1040-ES voucher. Our bookkeeping clients get the amounts and reminders from us each quarter.")],
+  "bookkeeping", "Let us calculate and schedule your quarterly payments every quarter as part of bookkeeping."),
+ "business-structure-quiz": (
+  [("Answer three questions", "Owners, expected profit and whether you'll raise money from investors."), ("See your likely fit", "Get a recommended structure and the tax return it files."), ("Confirm with us", "We review your plans and form the company in any state.")],
+  [("Can I change my structure later?", "Yes. Many owners start as an LLC and elect S corp taxation once profits grow, without forming a new company. Converting to a C corporation later is also possible, though it takes more paperwork."),
+   ("Why not just operate under my own name?", "Without an entity, you are personally on the hook for business debts and lawsuits. An LLC is inexpensive to form, separates business from personal assets and makes banking and bookkeeping cleaner, which is why we recommend it as the starting point."),
+   ("Do I need an operating agreement?", "Washington doesn't require you to file one, but every LLC should have one. It sets out ownership, decision-making and what happens if an owner leaves, and banks often ask for it. We prepare it as part of formation."),
+   ("Can a multi-member LLC be an S corp?", "Yes, as long as every owner is an eligible shareholder (generally US citizens or residents), there are no more than 100 owners and profits are split by ownership percentage.")],
+  "business-formation", "We form LLCs and corporations in all 50 states, get your EIN and handle licenses and permits."),
+ "tax-document-checklist": (
+  [("Check what applies", "Go section by section and tick off what you already have."), ("Print or save", "Save it as a PDF or print it to keep track as forms arrive."), ("Book your appointment", "Bring or send everything and we take it from there.")],
+  [("When will I have all my forms?", "Employers and most payers must send W-2s and 1099-NEC forms by January 31. Brokerage 1099s often arrive in mid-February, and corrected forms can come as late as March, so it pays to wait until you have everything."),
+   ("What if a form is missing?", "Don't guess. We can pull your IRS wage and income transcript to see what was reported under your Social Security number, or contact the payer for a copy."),
+   ("Do I need receipts for every expense?", "You need records that support each deduction: receipts, invoices, bank or card statements and a mileage log for vehicle use. Keep them at least three years after filing."),
+   ("Can you prepare my return if I'm not in Washington?", "Yes. We prepare federal and state returns for all 50 states. You send documents electronically and we meet by phone or video.")],
+  "tax-preparation", "We prepare individual and business returns of every type, federal and state, in all 50 states."),
+}
+SVC_TITLE = {s: t for s, t, _ in SERVICE_PAGES}
+
+def tool_extras(slug):
+    steps, faqs, svc, pitch = TOOL_EXTRA[slug]
+    st = "".join(f'<div class="step"><span class="step-n">{i+1}</span><h3>{h}</h3><p>{p}</p></div>' for i, (h, p) in enumerate(steps))
+    rel = "".join(f'<a class="tool-card" href="{s}.html"><span class="tc-ico">{icon(ic)}</span><h3>{t}</h3><p>{d}</p><span class="more">Open tool &rarr;</span></a>' for s, t, ic, d in TOOLS if s != slug)
+    return f'''<section class="no-print"><div class="wrap"><div class="sec-head"><span class="kicker">How to use it</span><h2>Three steps, about a minute</h2></div>
+<p class="swipe-hint">Swipe to see more &rarr;</p><div class="steps">{st}</div></div></section>
+<section class="soft no-print"><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">Questions</span><h2>Common questions</h2><p class="lead">Straight answers from our team.</p><a class="more" href="faq.html">See all FAQs &rarr;</a></div>{faq_list(faqs)}</div></section>
+<section class="no-print"><div class="wrap"><a class="svc-band" href="{svc}.html"><span class="tc-ico">{icon(svc)}</span><div><small>Related service</small><strong>{SVC_TITLE[svc]}</strong><p>{pitch}</p></div><span class="btn small">Learn more <span class="arr">&rarr;</span></span></a>
+<p class="os-label rel-label">More free tools</p><div class="tool-grid three">{rel}</div></div></section>'''
+
+for slug in TOOL_EXTRA:
+    t, b = PAGES[slug]
+    marker = '<section class="soft no-print"><div class="wrap narrow">' if slug == "tax-document-checklist" else '<section><div class="wrap narrow">'
+    assert b.count(marker) == 1, slug
+    PAGES[slug] = (t, b.replace(marker, tool_extras(slug) + marker.replace('class="soft no-print"', 'class="no-print"')))
+    PAGE_SCHEMA.setdefault(slug, []).append(faq_schema(TOOL_EXTRA[slug][1]))
+
+HUB_FAQ = [("Are the tools really free?", "Yes. There's no sign-up and no email required. Use them as often as you like."),
+           ("Do you save the numbers I enter?", "No. The calculators run entirely in your browser, and nothing is sent to us unless you choose to fill out a form."),
+           ("Is this tax advice?", "No. The tools give estimates for general information. Your actual tax depends on your full situation, which is what a consultation is for."),
+           ("How current are the numbers?", "The calculators use 2026 federal tax brackets, standard deductions and the Social Security wage base. We update them every January.")]
+def tools_hub2():
+    cards = "".join(f'<a class="tool-card" href="{s}.html"><span class="tc-ico">{icon(ic)}</span><h3>{t}</h3><p>{d}</p><span class="more">Open tool &rarr;</span></a>' for s, t, ic, d in TOOLS)
+    vis = vis_card("Free tools", [("S corp", "Savings calculator"), ("1040-ES", "Quarterly tax calculator"), ("LLC", "Business structure quiz"), ("List", "Tax document checklist")])
+    who = [("Freelancers &amp; gig workers", "Estimate quarterly payments and get your documents together.", "person"),
+           ("Growing small businesses", "See whether an S corp election would pay off this year.", "tax-planning"),
+           ("New business owners", "Find the right structure before you file anything.", "rocket")]
+    wc = "".join(f'<div class="card"><div class="ico-wrap">{icon(ic)}</div><h3>{t}</h3><p>{d}</p></div>' for t, d, ic in who)
+    return f'''<section class="page-head split-head"><div class="glow g1"></div><div class="gridbg"></div>
+<div class="wrap ph-grid"><div><span class="pill-badge"><span class="dot"></span>Free, no sign-up</span><h1>Free tax and business tools</h1>
+<p class="lead">Calculators, a quiz and a printable checklist built by our team. Run the numbers yourself, then call us when you want a professional to look at your situation.</p>
+<div class="btns"><a class="btn" href="#tools">See the tools <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Call {PHONE}</a></div></div>
+<div class="ph-visual">{vis}</div></div></section>''' + perks_strip() + f'''
+<section id="tools"><div class="wrap"><div class="sec-head"><span class="kicker">Tools</span><h2>Pick a tool</h2></div><div class="tool-grid">{cards}</div></div></section>
+<section class="soft"><div class="wrap"><div class="sec-head"><span class="kicker">Who they're for</span><h2>Built for people who run their own business</h2></div><div class="grid g3">{wc}</div></div></section>
+<section><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">Questions</span><h2>About these tools</h2></div>{faq_list(HUB_FAQ)}</div></section>''' + cta("Want real numbers, not estimates?", "Book a consultation and we'll run your actual situation.")
+PAGES["tools"] = ("Free tools", tools_hub2())
+PAGE_SCHEMA["tools"] = [faq_schema(HUB_FAQ)]
+
 PAGE_SCHEMA["s-corp-calculator"] = [{"@type": "WebApplication", "name": "S Corp Tax Savings Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}]
 PAGE_SCHEMA["estimated-tax-calculator"] = [{"@type": "WebApplication", "name": "Quarterly Estimated Tax Calculator", "applicationCategory": "FinanceApplication", "operatingSystem": "Any", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}]
 
