@@ -74,6 +74,9 @@ for s, t, d in SERVICE_PAGES:
                       faq_schema(FAQ_BY_ID[SVC_EXTRA[s][1]][2][:5])]
     CRUMBS[s] = [("Services", "services"), (_strip(t), s)]
 
+import hashlib as _hl
+ICON_VER = _hl.md5(open(os.path.join(ROOT, "img", "brand", "favicon-32.png"), "rb").read()).hexdigest()[:8] if os.path.exists(os.path.join(ROOT, "img", "brand", "favicon-32.png")) else "1"
+
 def seo_head(slug, title):
     t = page_title(slug, title)
     desc = META.get(slug, (None, None))[1] or META["index"][1]
@@ -97,7 +100,7 @@ def seo_head(slug, title):
 <meta property="og:image" content="{SITE_URL}/img/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(t)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{SITE_URL}/img/og-image.png">
 <meta name="geo.region" content="US-WA"><meta name="geo.placename" content="Tukwila">
-<link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"><link rel="apple-touch-icon" href="img/apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="favicon.ico?v={ICON_VER}" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png?v={ICON_VER}"><link rel="apple-touch-icon" href="img/apple-touch-icon.png?v={ICON_VER}"><link rel="manifest" href="site.webmanifest">
 ''' + "\n".join(_ld(x) for x in ld)
 
 BRAND_FILES = ["favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "favicon.ico", "og-image.png"]
