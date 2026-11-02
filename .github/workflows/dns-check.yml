@@ -1,0 +1,22 @@
+name: DNS check
+
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/workflows/dns-check.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for d in kaplunfinancial.com www.kaplunfinancial.com; do
+            echo "== $d (Google 8.8.8.8)"; dig +noall +answer $d @8.8.8.8
+            echo "== $d (Cloudflare 1.1.1.1)"; dig +noall +answer $d @1.1.1.1
+          done
+          echo "== NS"; dig +short NS kaplunfinancial.com @8.8.8.8
+          for ns in $(dig +short NS kaplunfinancial.com @8.8.8.8); do
+            echo "== authoritative $ns"; dig +noall +answer kaplunfinancial.com A @$ns; dig +noall +answer www.kaplunfinancial.com @$ns
+          done
+          echo "== AAAA"; dig +short AAAA kaplunfinancial.com @8.8.8.8
+          echo "== CAA"; dig +short CAA kaplunfinancial.com @8.8.8.8
