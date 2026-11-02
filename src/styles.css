@@ -815,95 +815,91 @@ section.perks-sec{padding:0!important;background:var(--night);border-top:1px sol
   .svc-band{flex-wrap:wrap;padding:22px}.svc-band .btn{margin-left:0}}
 @media (max-width:620px){.tool-grid.three{grid-template-columns:1fr}}
 
-/* ===== phones: simpler, calmer layout (desktop untouched) ===== */
+/* ===== phones: same KFG look, less clutter (desktop untouched) ===== */
 @media (max-width:820px){
-  :root{--sec:40px}
+  :root{--sec:44px}
   .m-hide{display:none}
-  /* less decoration: no section pills, chip clouds, counters, swipe hints or repeat visuals */
-  .kicker,.hero-tags,.hero-visual,.chips,.f-num,.swipe-hint,.ph-visual,.f-visual,.svc-jump-sec,.other-sec{display:none!important}
-  .sec-head{margin-bottom:20px}
-  .sec-head.center{text-align:left;align-items:flex-start}
-  .sec-head h2,.split h2,.reach h2,.feature h2,.sticky-copy h2{font-size:1.65rem;line-height:1.15}
-  .lead{font-size:1rem}
-  .page-head .lead,.hero-lead{font-size:1rem}
-  /* one button per block: the bottom bar already offers Call + Book */
-  .hero .btns .btn.glass,.page-head .btns .btn.glass,.page-head .btns .btn+.btn,.cta .btns .btn.glass,.feature .btns .btn.outline{display:none}
+  /* trim repeats, keep the signature visuals */
+  .hero-tags,.chips,.f-num,.swipe-hint,.svc-jump-sec,.other-sec{display:none!important}
+  .sec-head{margin-bottom:22px}
+  .kicker{margin-bottom:12px}
+  .sec-head h2,.split h2,.reach h2,.feature h2,.sticky-copy h2{font-size:1.7rem;line-height:1.15}
+  .lead,.page-head .lead,.hero-lead{font-size:1rem}
+  .intro{font-size:1.1rem}
+  /* one button per block: the floating bar already has Call + Book */
+  .hero .btns .btn.glass,.page-head .btns .btn+.btn,.cta .btns .btn.glass,.feature .btns .btn.outline{display:none}
   .hero{padding:28px 0 36px}
   .hero h1{font-size:clamp(2.2rem,10vw,2.8rem);margin-top:18px}
   .hero .btns,.page-head .btns{margin-top:22px}
-  /* home services: a clean tappable list instead of a card grid */
-  .bento{display:flex!important;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff}
-  .bento .tile,.bento .tile-big{display:grid;grid-template-columns:40px 1fr 20px;align-items:center;column-gap:14px;padding:16px!important;border:0;border-radius:0;box-shadow:none;background:#fff;color:var(--text)}
-  .bento .tile+.tile{border-top:1px solid var(--line)}
-  .bento .tile-big:before{display:none}
-  .bento .tile .tile-ico{width:40px!important;height:40px!important;border-radius:12px!important;box-shadow:none}
-  .bento .tile h3{margin:0!important;padding:0!important;font-size:1rem!important;line-height:1.3}
-  .bento .tile p{display:none}
-  .bento .tile .tile-go{font-size:0!important;margin:0!important;justify-self:end}
-  .bento .tile .tile-go:after{content:"\203A";font-size:1.6rem;line-height:1;color:var(--blue)}
-  .bento .tile:hover{transform:none}
-  /* where-we-work: the message is enough, drop the tiles */
-  .reach-list{display:none}
-  /* industries teaser: small two-column list, no descriptions */
-  .ind-grid{gap:8px}
-  .ind{grid-template-columns:28px 1fr;column-gap:10px;padding:12px;box-shadow:none}
-  .ind-ico{width:28px;height:28px;border-radius:8px;grid-row:auto}
-  .ind-ico svg{width:16px;height:16px}
-  .ind strong{font-size:.9rem}.ind small{display:none}
-  .split .btns{margin-top:18px}
-  /* steps and values: short vertical list, no sideways swiping */
-  .steps,.vals,.timeline,.stepper{display:grid!important;grid-template-columns:1fr!important;overflow:visible!important;margin:0!important;padding:0!important;gap:0!important}
+  /* hero dashboard card stays, a little tighter */
+  .hero-visual{margin-top:26px}
+  .fc-main{padding:18px}
+  .fc-head{padding-bottom:12px}
+  .fc-row{padding:11px 0}
+  .fc-row small{display:none}
+  /* home services: dark feature tile + 2x2 cards, titles only */
+  .bento .tile-big{padding:24px}
+  .bento .tile-big h3{padding-top:18px!important}
+  .bento .tile:not(.tile-big){padding:16px;min-height:0}
+  .bento .tile:not(.tile-big) h3{font-size:.98rem;margin:12px 0 0}
+  .bento .tile:not(.tile-big) p{display:none}
+  .bento .tile:not(.tile-big) .tile-go{margin-top:10px}
+  .bento{align-items:stretch}
+  /* where we work: dark band, one compact row each */
+  .reach-list{grid-template-columns:1fr;gap:8px}
+  .rl{grid-template-columns:36px 1fr auto;align-items:center;gap:12px;padding:12px 14px}
+  .rl-ico{width:36px;height:36px}
+  .rl small{display:none!important}
+  .rl em{grid-column:auto;justify-self:end}
+  /* industries teaser: two columns, names only */
+  .ind{padding:14px}
+  .ind small{display:none}
+  /* steps and values: stacked cards, no sideways swiping */
+  .steps,.vals,.timeline,.stepper{display:grid!important;grid-template-columns:1fr!important;overflow:visible!important;margin:0!important;padding:0!important;gap:10px!important}
   .steps>*,.vals>*,.timeline>*,.stepper>*{flex:initial}
-  .step,.val{display:grid;grid-template-columns:40px 1fr;column-gap:14px;padding:14px 0;border:0;border-radius:0;background:none;box-shadow:none}
-  .step+.step,.val+.val{border-top:1px solid var(--line)}
-  .step-n{grid-row:span 2;width:36px;height:36px;border-radius:10px;font-size:.95rem}
-  .step h3,.val h3{margin:4px 0 2px;font-size:1.05rem}
+  .step,.val{display:grid;grid-template-columns:44px 1fr;column-gap:14px;padding:16px 18px}
+  .step-n{grid-row:span 2;width:40px;height:40px;border-radius:12px}
+  .step h3,.val h3{margin:2px 0 2px;font-size:1.05rem}
   .step p,.val p{font-size:.92rem}
-  .val-n{grid-row:span 2;font-size:1.4rem}
-  .tl-node{padding:14px 16px}
-  /* free tools + cards: compact rows */
-  .tool-grid,.tool-grid.five,.tool-grid.three,.grid{gap:10px}
-  .tool-card{display:grid;grid-template-columns:40px 1fr 20px;align-items:center;column-gap:14px;padding:14px 16px;box-shadow:none}
-  .tool-card .tc-ico{width:40px;height:40px;border-radius:12px;box-shadow:none}
-  .tool-card .tc-ico .ico{width:20px;height:20px}
+  .val-n{grid-row:span 2;font-size:1.6rem;line-height:1.2}
+  /* free tools: cards become rows with the blue icon */
+  .tool-grid,.tool-grid.five,.tool-grid.three{gap:10px}
+  .tool-card{display:grid;grid-template-columns:44px 1fr 20px;align-items:center;column-gap:14px;padding:14px 16px}
   .tool-card h3{font-size:.98rem;line-height:1.3}
   .tool-card p{display:none}
+  .tool-card .tc-ico{width:44px;height:44px}
   .tool-card .more{font-size:0;padding:0;margin:0;justify-self:end}
-  .tool-card .more:after{content:"\203A";font-size:1.6rem;line-height:1;color:var(--blue)}
-  .card{display:grid;grid-template-columns:40px 1fr;column-gap:14px;padding:16px;box-shadow:none}
-  .card .ico-wrap{grid-row:span 2;width:40px;height:40px;border-radius:12px;box-shadow:none}
+  .tool-card .more:after{content:"\2192";font-size:1.1rem;font-weight:700;color:var(--blue)}
+  .card{display:grid;grid-template-columns:44px 1fr;column-gap:14px;padding:16px}
+  .card .ico-wrap{grid-row:span 2;width:44px;height:44px;border-radius:14px}
   .card h3{margin:0 0 2px;font-size:1rem}
   .card p{font-size:.9rem}
-  /* services page: five short blocks */
-  .feature{gap:0;padding:28px 0}
+  /* services page: keep the dark panels, drop the tag clouds */
+  .feature{gap:22px;padding:30px 0}
   .f-top{margin-bottom:14px}
   .feature .btns{margin-top:18px}
   .feature .lead{margin-top:10px}
-  /* service pages: plain checklist, simple dates */
+  /* service pages: plain checklist, single-column dates */
   .split-top .check{grid-template-columns:1fr!important;gap:0}
   .split-top .check li{background:none;border:0;border-radius:0;padding:10px 0 10px 34px;font-size:.95rem}
   .split-top .check li:before{left:0;top:11px}
   .split-top .check li:after{left:6px;top:17px}
-  .intro{font-size:1.1rem}
-  .who{padding:16px 18px}
   .cal-grid{grid-template-columns:1fr!important;gap:8px}
-  .cal{grid-template-columns:56px 1fr;gap:14px;padding:12px;box-shadow:none}
+  .cal{grid-template-columns:56px 1fr;gap:14px;padding:12px}
   .cal-d{width:56px}.cal-d strong{font-size:1.3rem;padding:4px 0}
-  .tool-promo{padding:16px}
   .tool-promo p{display:none}
-  /* call-to-action: shorter */
-  .cta{padding:28px 22px}
-  .cta h2{font-size:1.6rem}
-  .cta p{font-size:1rem;margin-top:10px}
+  /* call to action: one button */
+  .cta{padding:30px 24px}
+  .cta h2{font-size:1.7rem}
   .cta .btns{margin-top:20px}
-  /* footer: contact first, just the key links */
-  footer{padding-top:32px}
+  /* footer: contact + key links */
+  footer{padding-top:36px}
   .foot-grid{display:flex;flex-direction:column;gap:22px}
   .foot-grid>div:first-child p,.foot-grid>div:nth-child(2){display:none}
-  .foot-logo{height:44px}
+  .foot-logo{height:48px}
   .foot-grid h4{margin-bottom:8px}
   .foot-grid .plain{display:flex;flex-wrap:wrap;gap:4px 18px}
   .foot-grid .plain li{padding:2px 0}
   .foot-grid>div:nth-child(3){order:3}
-  .copy{margin-top:22px;padding-top:16px}
+  .copy{margin-top:24px;padding-top:16px}
 }
