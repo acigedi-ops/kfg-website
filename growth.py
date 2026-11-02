@@ -9,7 +9,7 @@ HOURS_PLAIN = "Mon-Fri, 9am-6pm"
 FORM_ACTION = f"mailto:{EMAIL}"
 FORM_ATTRS = ' method="post" enctype="text/plain"' if FORM_ACTION.startswith("mailto:") else ' method="post"'
 
-NAV.insert(4, ("tools", "Free tools"))
+NAV.insert(1, ("tools", "Free tools"))
 
 # ============================================================ 1. TECHNICAL SEO
 # Unique <title> and meta description per page (titles under ~60 chars, descriptions under ~160).
@@ -175,6 +175,7 @@ META.update({
  "tax-document-checklist": ("Tax Document Checklist: What to Bring (Printable) | KFG",
            "Printable checklist of documents for your personal or business tax return: W-2s, 1099s, deductions, business records and more."),
 })
+TOOL_SLUGS = [s for s, *_ in TOOLS]
 for s, t, _, _ in TOOLS:
     CRUMBS[s] = [("Free tools", "tools"), (t, s)]
 

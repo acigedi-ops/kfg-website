@@ -16,8 +16,8 @@ EMAIL = "info@kaplunfinancial.com"
 CITY = "Tukwila, WA"
 NAME = "Kaplun Financial Group"
 
-NAV = [("index", "Home"), ("about", "About"), ("services", "Services"),
-       ("industries", "Industries"), ("faq", "FAQ"), ("contact", "Contact")]
+# Header: Home is the logo, Industries lives in the footer.
+NAV = [("services", "Services"), ("about", "About"), ("faq", "FAQ"), ("contact", "Contact")]
 
 SERVICE_PAGES = [
     ("tax-preparation", "Tax Preparation", "Federal and state returns of every type, in all 50 states."),
@@ -342,7 +342,7 @@ CSS_VER = hashlib.md5(CSS.encode()).hexdigest()[:8]  # cache-buster: browsers fe
 def nav_html(active):
     items = ""
     for slug, label in NAV:
-        cls = ' class="active"' if slug == active or (label == "Services" and active in [s for s, _, _ in SERVICE_PAGES]) else ""
+        cls = ' class="active"' if slug == active or (label == "Services" and active in [s for s, _, _ in SERVICE_PAGES]) or (slug == "tools" and active in TOOL_SLUGS) else ""
         items += f'<li><a href="{slug}.html"{cls}>{label}</a></li>'
     return items
 
