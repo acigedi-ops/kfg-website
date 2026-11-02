@@ -160,18 +160,18 @@ def lead_box(source, title="Want a pro to check your numbers?", text="Send us yo
 TOOLS = [
  ("s-corp-calculator", "S Corp Tax Savings Calculator", "rocket", "See roughly how much self-employment tax an S corp election could save you."),
  ("estimated-tax-calculator", "Quarterly Estimated Tax Calculator", "tax-planning", "Estimate your quarterly IRS payments if you are self-employed or own a business."),
- ("business-structure-quiz", "Which Business Structure Fits? Quiz", "business-formation", "Answer four questions to see whether an LLC, S corp, partnership or C corp fits."),
+ ("business-structure-quiz", "Which Business Structure Fits? Quiz", "business-formation", "Answer three questions to see whether an LLC, S corp, multi-member LLC or C corp fits."),
  ("tax-document-checklist", "Tax Document Checklist", "tax-preparation", "A printable list of everything to gather before your personal or business return."),
 ]
 META.update({
  "tools": ("Free Tax Calculators & Small Business Tools | KFG",
            "Free S corp savings calculator, quarterly estimated tax calculator, business structure quiz and printable tax document checklist."),
  "s-corp-calculator": ("S Corp Tax Savings Calculator (2026) | Kaplun Financial",
-           "Free S corp calculator: compare self-employment tax as an LLC or sole proprietor with payroll tax as an S corp, using 2026 rates."),
+           "Free S corp calculator: compare self-employment tax as a standard LLC with payroll tax as an S corp, using 2026 rates."),
  "estimated-tax-calculator": ("Quarterly Estimated Tax Calculator 2026 | Kaplun Financial",
            "Estimate your 2026 quarterly estimated tax payments for self-employment income, with federal brackets, SE tax and due dates."),
  "business-structure-quiz": ("LLC vs S Corp vs C Corp Quiz: Which Fits You? | KFG",
-           "Answer four quick questions to see which business structure may fit you best: sole proprietor, LLC, S corp, partnership or C corp."),
+           "Answer three quick questions to see which business structure may fit you best: single-member LLC, S corp, multi-member LLC or C corp."),
  "tax-document-checklist": ("Tax Document Checklist: What to Bring (Printable) | KFG",
            "Printable checklist of documents for your personal or business tax return: W-2s, 1099s, deductions, business records and more."),
 })
@@ -197,11 +197,11 @@ def scorp_page():
 <div><label for="sc-cost">Extra yearly cost of running an S corp</label><input id="sc-cost" type="number" inputmode="numeric" min="0" step="100" value="2500"><small>Payroll service, extra business return and state fees. Varies by state.</small></div>
 {DISCLAIM}</div>
 <div class="tool-out"><div class="glow g1"></div><p class="to-k">Estimated yearly savings</p><p class="to-big" id="sc-save">$0</p>
-<div class="to-rows"><div><span>Self-employment tax as LLC / sole prop</span><strong id="sc-se">$0</strong></div>
+<div class="to-rows"><div><span>Self-employment tax as a standard LLC</span><strong id="sc-se">$0</strong></div>
 <div><span>Payroll tax on S corp salary</span><strong id="sc-fica">$0</strong></div><div><span>Extra S corp costs</span><strong id="sc-c">$0</strong></div></div>
 <p class="to-msg" id="sc-msg"></p><a class="btn" href="contact.html">Talk to us about an S corp <span class="arr">&rarr;</span></a></div></div></section>
 <section class="soft"><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">How it works</span><h2>What this calculator assumes</h2></div>
-<div class="prose-sm"><p>As a sole proprietor or single-member LLC, you pay 15.3% self-employment tax on 92.35% of your profit (Social Security up to the 2026 wage base of $184,500, Medicare on all of it). As an S corp, you pay that payroll tax only on your salary; the rest of the profit comes to you as a distribution without payroll tax.</p>
+<div class="prose-sm"><p>As a standard single-member LLC, you pay 15.3% self-employment tax on 92.35% of your profit (Social Security up to the 2026 wage base of $184,500, Medicare on all of it). As an S corp, you pay that payroll tax only on your salary; the rest of the profit comes to you as a distribution without payroll tax.</p>
 <p>It leaves out income tax effects, the 0.9% additional Medicare tax, the qualified business income deduction and state taxes, which can change the result. Washington has no personal income tax, but other states treat S corps differently. As a rule of thumb, an S corp starts to make sense once profit is comfortably above what a reasonable salary would be.</p></div></div></section>
 <section><div class="wrap narrow">{lead_box("S corp calculator", "Is an S corp right for you?", "Send us your details and we will check the numbers for your business before you elect.")}</div></section>
 <script>(function(){{var SS=184500,$=function(i){{return document.getElementById(i)}},m=function(n){{return '$'+Math.round(n).toLocaleString('en-US')}};
@@ -240,28 +240,26 @@ QUIZ = [
  ("owners", "How many people will own the business?", [("1", "Just me (or me and my spouse)"), ("2", "Two or more partners")]),
  ("profit", "What yearly profit do you expect once you're up and running?", [("lo", "Under $40,000"), ("mid", "$40,000 to $80,000"), ("hi", "Over $80,000")]),
  ("investors", "Do you plan to raise money from outside investors?", [("no", "No, I'll fund it myself or with loans"), ("yes", "Yes, I want investors or venture capital")]),
- ("risk", "Will you have employees, customers on site, vehicles or physical products?", [("yes", "Yes"), ("no", "No, it's just me working online or at clients' offices")]),
 ]
 def quiz_page():
     qs = "".join(f'<fieldset class="qz-q" data-q="{k}"><legend><span class="qz-n">{i+1}</span>{q}</legend><div class="pick">' +
                  "".join(f'<label class="pk"><input type="radio" name="qz-{k}" value="{v}"><span>{l}</span></label>' for v, l in opts) + '</div></fieldset>'
                  for i, (k, q, opts) in enumerate(QUIZ))
-    return tool_head("Which business structure fits you?", "Answer four quick questions to see which structure may fit: sole proprietor, LLC, S corp, partnership or C corp. Takes under a minute.", "Free quiz") + f'''
+    return tool_head("Which business structure fits you?", "Answer three quick questions to see which structure may fit: single-member LLC, S corp, multi-member LLC or C corp. Takes under a minute.", "Free quiz") + f'''
 <section><div class="wrap tool-wrap"><div class="tool-in qz">{qs}{DISCLAIM.replace("tax advice", "legal or tax advice")}</div>
 <div class="tool-out" id="qz-out"><div class="glow g1"></div><p class="to-k">Your likely fit</p><p class="to-big sm" id="qz-r">Answer the questions</p><p class="to-msg" id="qz-why">Your result will appear here as you answer.</p>
 <div class="to-rows" id="qz-forms" hidden><div><span>Tax return you would file</span><strong id="qz-f">&nbsp;</strong></div></div>
 <a class="btn" href="business-formation.html">Form your company with KFG <span class="arr">&rarr;</span></a></div></div></section>
 <section><div class="wrap narrow">{lead_box("Business structure quiz", "Get a second opinion on your structure", "We will look at your plans and confirm the right structure before you file anything.", "Review my structure")}</div></section>
 <script>(function(){{var R={{
-sp:["Single-member LLC","You keep things simple: profit goes on your personal return. An LLC costs little to form and keeps business debts separate from your personal assets, which matters once you have customers, staff or equipment.","Schedule C on your 1040"],
-spl:["Sole proprietor or single-member LLC","At this stage a sole proprietorship is the simplest option. Many owners still form a single-member LLC for liability protection; it's taxed the same way.","Schedule C on your 1040"],
+sp:["Single-member LLC","Simple and protected: profit goes on your personal return, and the LLC keeps business debts and lawsuits separate from your personal assets. As profit grows, you can elect S corp tax status without forming a new company.","Schedule C on your 1040"],
 llcs:["LLC now, S corp election soon","Start as an LLC. As profit grows past roughly $40,000 to $60,000, electing S corp tax status can start saving self-employment tax. Try our S corp calculator to check.","Schedule C now, Form 1120-S later"],
 s:["LLC taxed as an S corporation","With this level of profit, an S corp election often saves thousands in self-employment tax. You pay yourself a reasonable salary and take the rest as distributions.","Form 1120-S plus payroll"],
 p:["Multi-member LLC (partnership)","With partners, a multi-member LLC is flexible and protects each owner. It files a partnership return and each owner gets a K-1. Higher-profit partnerships can also elect S corp status.","Form 1065, K-1s to owners"],
 c:["C corporation","Investors and venture capital funds usually expect a C corporation. It pays its own corporate tax and makes it easy to issue shares and stock options.","Form 1120"]}};
 var $=function(i){{return document.getElementById(i)}};function v(k){{var e=document.querySelector('input[name="qz-'+k+'"]:checked');return e?e.value:null}}
-function run(){{var o=v('owners'),p=v('profit'),i=v('investors'),r=v('risk');var n=[o,p,i,r].filter(Boolean).length;if(n<4){{$('qz-r').textContent=n?'Keep going ('+n+' of 4)':'Answer the questions';return}}
-var k=i==='yes'?'c':o==='2'?'p':p==='hi'?'s':p==='mid'?'llcs':(r==='no'?'spl':'sp');$('qz-r').textContent=R[k][0];$('qz-why').textContent=R[k][1];$('qz-f').textContent=R[k][2];$('qz-forms').hidden=false;
+function run(){{var o=v('owners'),p=v('profit'),i=v('investors');var n=[o,p,i].filter(Boolean).length;if(n<3){{$('qz-r').textContent=n?'Keep going ('+n+' of 3)':'Answer the questions';return}}
+var k=i==='yes'?'c':o==='2'?'p':p==='hi'?'s':p==='mid'?'llcs':'sp';$('qz-r').textContent=R[k][0];$('qz-why').textContent=R[k][1];$('qz-f').textContent=R[k][2];$('qz-forms').hidden=false;
 if(window.innerWidth<1040)$('qz-out').scrollIntoView({{behavior:'smooth',block:'start'}});}}
 document.querySelectorAll('.qz input').forEach(function(e){{e.addEventListener('change',run)}});}})();</script>''' + cta()
 
