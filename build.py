@@ -16,8 +16,8 @@ EMAIL = "info@kaplunfinancial.com"
 CITY = "Tukwila, WA"
 NAME = "Kaplun Financial Group"
 
-# Header: Home is the logo, Industries lives in the footer.
-NAV = [("services", "Services"), ("about", "About"), ("faq", "FAQ"), ("contact", "Contact")]
+# Header: Home is the logo; Contact is the Book a consultation button; Industries lives in the footer.
+NAV = [("services", "Services"), ("about", "About"), ("faq", "FAQ")]
 
 SERVICE_PAGES = [
     ("tax-preparation", "Tax Preparation", "Federal and state returns of every type, in all 50 states."),
