@@ -191,7 +191,7 @@ TOOL_VIS = {
 
 PERKS = [("100% free", "No sign-up, no email required to use it"), ("Updated for 2026", "Current IRS brackets, limits and dates"), ("Private", "Your numbers stay in your browser")]
 def perks_strip():
-    ic = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
+    ic = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
     return '<section class="perks-sec"><div class="wrap"><div class="perks">' + "".join(f'<div class="perk"><span class="perk-ico">{ic}</span><div><strong>{t}</strong><span>{d}</span></div></div>' for t, d in PERKS) + '</div></div></section>'
 
 def tool_head(title, lead, kicker="Free tool"):

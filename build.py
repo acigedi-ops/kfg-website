@@ -42,7 +42,7 @@ ICONS = {
 }
 
 def icon(key):
-    return f'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[key]}</svg>'
+    return f'<svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[key]}</svg>'
 
 def card(title, text, ico=None, link=None):
     i = f'<div class="ico-wrap">{icon(ico)}</div>' if ico else ""
@@ -287,7 +287,7 @@ from faq_data import FAQ_CATS
 
 def faq_page():
     total = sum(len(q) for *_, q in FAQ_CATS)
-    search = '<div class="faq-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><label for="faq-q" class="sr">Search questions</label><input id="faq-q" type="search" placeholder="Search questions, e.g. LLC, extension, sales tax" autocomplete="off"></div>'
+    search = '<div class="faq-search"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><label for="faq-q" class="sr">Search questions</label><input id="faq-q" type="search" placeholder="Search questions, e.g. LLC, extension, sales tax" autocomplete="off"></div>'
     cats = f'<div class="faq-cats" role="tablist"><button class="on" data-cat="all">All <em>{total}</em></button>' + "".join(
         f'<button data-cat="{cid}">{label} <em>{len(qs)}</em></button>' for cid, label, _, qs in FAQ_CATS) + '</div>'
     groups = "".join(
@@ -326,9 +326,9 @@ PAGES["contact"] = ("Contact", page_head("Contact us", "Tell us what you need an
 </form></div>
 <div><h2>Reach us directly</h2>
 <div class="contact-item">{icon("person")}<div><strong>Phone</strong><br><a href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>Location</strong><br>{CITY}<br><span class="muted">Serving the greater Seattle area</span></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>Mon&ndash;Fri, 9am&ndash;6pm</div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>Location</strong><br>{CITY}<br><span class="muted">Serving the greater Seattle area</span></div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>Mon&ndash;Fri, 9am&ndash;6pm</div></div>
 </div></div></section>''')
 
 exec(open(os.path.join(ROOT, "pages_unique.py")).read())
