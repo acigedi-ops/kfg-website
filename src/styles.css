@@ -793,3 +793,4 @@ section.promo-sec{padding:0 0 var(--sec)!important}
   main>section{padding:0!important}.ck-grid{columns:2}.ck-col{box-shadow:none;border:1px solid #ccc;padding:14px}body{font-size:12px}}
 .pk{position:relative}.pk input{pointer-events:none;top:0;left:0}
 .split-top h2+.intro{margin-top:18px}
+.to-sub{display:block;font-style:normal;font-size:.78rem;color:var(--muted-dk)}
