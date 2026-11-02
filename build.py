@@ -328,10 +328,11 @@ PAGES["contact"] = ("Contact", page_head("Contact us", "Tell us what you need an
 <div class="contact-item">{icon("person")}<div><strong>Phone</strong><br><a href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
 <div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
 <div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>Location</strong><br>{CITY}<br><span class="muted">Serving the greater Seattle area</span></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>By appointment</div></div>
+<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>Mon&ndash;Fri, 9am&ndash;6pm</div></div>
 </div></div></section>''')
 
 exec(open(os.path.join(ROOT, "pages_unique.py")).read())
+exec(open(os.path.join(ROOT, "growth.py")).read())
 
 # ---------------------------------------------------------------- layout
 CSS = open(os.path.join(ROOT, "src", "styles.css")).read()
@@ -348,21 +349,20 @@ def layout(slug, title, body, logo_src, css_tag, logo_dark_src):
     svc_links = "".join(f'<li><a href="{s}.html">{t2}</a></li>' for s, t2, _ in SERVICE_PAGES)
     return f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{t}</title>
-<meta name="description" content="{NAME}, based in {CITY}: tax preparation, tax planning, LLC formation and bookkeeping for clients in all 50 states, plus commercial insurance for Washington businesses.">
+{seo_head(slug, title)}
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 {css_tag}</head><body>
-<header><div class="wrap nav"><a class="logo" href="index.html"><img src="{logo_dark_src}" alt="{NAME}"></a>
+<header><div class="wrap nav"><a class="logo" href="index.html"><img src="{logo_dark_src}" alt="{NAME}" width="71" height="46"></a>
 <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button><ul class="menu">{nav_html(slug)}<li class="menu-cta"><a class="btn" href="contact.html">Book a consultation</a><a class="menu-tel" href="tel:{PHONE_TEL}">{PHONE}</a></li></ul>
 <a class="btn small nav-cta" href="contact.html">Book a consultation</a></div></header>
 <main>{body}</main>
 <div class="mobile-bar"><a class="mb-call" href="tel:{PHONE_TEL}">Call</a><a class="mb-book" href="contact.html">Book a consultation</a></div>
 <footer><div class="wrap foot-grid">
-<div><img class="foot-logo" src="{logo_dark_src}" alt="{NAME}"><p>{NAME}<br>Based in {CITY}. Taxes, business formation and bookkeeping in all 50 states. Commercial insurance for Washington businesses.</p></div>
+<div><img class="foot-logo" src="{logo_dark_src}" alt="{NAME}" width="460" height="297" loading="lazy"><p>{NAME}<br>Based in {CITY}. Taxes, business formation and bookkeeping in all 50 states. Commercial insurance for Washington businesses.</p></div>
 <div><h4>Services</h4><ul class="plain">{svc_links}</ul></div>
-<div><h4>Company</h4><ul class="plain"><li><a href="about.html">About</a></li><li><a href="industries.html">Industries</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-<div><h4>Contact</h4><p><a href="tel:{PHONE_TEL}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a><br>{CITY}<br>Serving all 50 states</p></div>
+<div><h4>Company</h4><ul class="plain"><li><a href="about.html">About</a></li><li><a href="industries.html">Industries</a></li><li><a href="tools.html">Free tools</a></li><li><a href="areas.html">Areas we serve</a></li><li><a href="faq.html">FAQ</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+<div><h4>Contact</h4><p><a href="tel:{PHONE_TEL}">{PHONE}</a><br><a href="mailto:{EMAIL}">{EMAIL}</a><br>{CITY}<br>{HOURS}<br>Serving all 50 states</p></div>
 </div><div class="wrap copy">&copy; <span class="year"></span> {NAME}. All rights reserved.</div></footer>
 '''
 
@@ -386,6 +386,12 @@ def build_site():
         body = body.replace('src="LOGO_DARK"', 'src="img/kfg-logo-dark-bg.png"')
         html = layout(slug, title, body, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
         open(os.path.join(out, f"{slug}.html"), "w").write(html)
+    nf = layout("404", "Page not found", NOT_FOUND, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
+    nf = nf.replace('<meta name="robots" content="index,follow,max-image-preview:large">', '<meta name="robots" content="noindex">')
+    nf = re.sub(r'(href|src)="(?!https?:|tel:|mailto:|#|/)([^"]+)"', r'\1="/\2"', nf)  # 404 can be served at any path
+    open(os.path.join(out, "404.html"), "w").write(nf)
+    make_brand_images(os.path.join(out, "img"))
+    write_seo_files(out)
 
 def build_preview():
     """Single HTML file: every page is a <div data-page>, links become #hash routes."""
@@ -400,7 +406,7 @@ def build_preview():
             shell = head
         rest = re.sub(r'href="([a-z-]+)\.html"', lambda m: f'href="#{"home" if m.group(1)=="index" else m.group(1)}"', rest)
         pid = "home" if slug == "index" else slug
-        pages_html += f'<div class="pv-page" data-page="{pid}" data-title="{NAME} | {title}" hidden>{rest}</div>\n'
+        pages_html += f'<div class="pv-page" data-page="{pid}" data-title="{_html.escape(page_title(slug, title), quote=True)}" hidden>{rest}</div>\n'
     js = '''<script>
 function show(){var id=(location.hash||'#home').slice(1);var pg=document.querySelector('[data-page="'+id+'"]')||document.querySelector('[data-page="home"]');
 document.querySelectorAll('.pv-page').forEach(function(p){p.hidden=p!==pg});document.title=pg.dataset.title;window.scrollTo({top:0,behavior:'instant'});}
