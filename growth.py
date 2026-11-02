@@ -197,7 +197,6 @@ def scorp_page():
 <div><label for="sc-profit">Expected net business profit for the year</label><input id="sc-profit" type="number" inputmode="numeric" min="0" step="1000" value="100000"></div>
 <div><label for="sc-salary">Reasonable salary you would pay yourself</label><input id="sc-salary" type="number" inputmode="numeric" min="0" step="1000" value="50000"><small>The IRS requires S corp owners who work in the business to take a reasonable salary.</small></div>
 <div><label for="sc-other">Other taxable income (spouse wages, interest, etc.)</label><input id="sc-other" type="number" inputmode="numeric" min="0" step="1000" value="0"></div>
-<div><label for="sc-cost">Extra yearly cost of running an S corp</label><input id="sc-cost" type="number" inputmode="numeric" min="0" step="100" value="2500"><small>Payroll service, extra business return, state fees and state unemployment tax. Varies by state.</small></div>
 <small>Professional services (SSTB) include accounting, consulting, law, health, financial services and similar fields. Their QBI deduction phases out at higher incomes.</small>
 {DISCLAIM}</div>
 <div class="tool-out"><div class="glow g1"></div><p class="to-k">Estimated yearly savings</p><p class="to-big" id="sc-save">$0</p>
@@ -208,28 +207,27 @@ def scorp_page():
 <p class="to-k sm">S corporation</p>
 <div class="to-rows"><div><span>Payroll taxes on salary</span><strong id="sc-fica">$0</strong></div>
 <div><span>Federal income tax <em class="to-sub" id="sc-q2"></em></span><strong id="sc-it2">$0</strong></div>
-<div><span>Extra S corp costs</span><strong id="sc-c">$0</strong></div>
 <div class="tot"><span>Total</span><strong id="sc-t2">$0</strong></div></div>
-<p class="to-msg" id="sc-msg"></p><a class="btn" href="contact.html">Talk to us about an S corp <span class="arr">&rarr;</span></a></div></div></section>
+<p class="to-msg" id="sc-msg"></p><p class="to-note"><strong>Keep in mind:</strong> an S corp costs more to run than a standard LLC (payroll service, a separate business tax return, state fees and state unemployment tax). The savings shown are before those costs.</p><a class="btn" href="contact.html">Talk to us about an S corp <span class="arr">&rarr;</span></a></div></div></section>
 <section class="soft"><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">How it works</span><h2>What this calculator counts</h2></div>
 <div class="prose-sm"><p><strong>Standard LLC:</strong> 15.3% self-employment tax on 92.35% of profit (Social Security up to the 2026 wage base of $184,500, Medicare on all of it, plus the 0.9% additional Medicare tax above $200,000 single / $250,000 joint). Half of the self-employment tax is deducted before income tax.</p>
-<p><strong>S corp:</strong> employee and employer Social Security and Medicare on your salary only, the 0.9% additional Medicare tax where it applies, and federal unemployment tax (FUTA) on the first $7,000. The employer share and your extra costs are deducted from the business profit that passes through to you.</p>
+<p><strong>S corp:</strong> employee and employer Social Security and Medicare on your salary only, the 0.9% additional Medicare tax where it applies, and federal unemployment tax (FUTA) on the first $7,000. The employer share is deducted from the business profit that passes through to you.</p>
 <p><strong>Section 199A (QBI) deduction:</strong> up to 20% of qualified business income, limited to 20% of taxable income. In an S corp your salary is not QBI, so the deduction is usually smaller. Above $201,775 taxable income ($403,550 joint) the deduction is limited by W-2 wages, and for professional service businesses it phases out over the next $75,000 ($150,000 joint).</p>
-<p>Federal income tax uses 2026 brackets and the standard deduction. Not included: itemized deductions, credits, health insurance and retirement contributions, and state income tax. Washington has no personal income tax, but other states treat S corps differently.</p></div></div></section>
+<p>Federal income tax uses 2026 brackets and the standard deduction. Not included: the extra cost of running an S corp, itemized deductions, credits, health insurance and retirement contributions, and state income tax. Washington has no personal income tax, but other states treat S corps differently.</p></div></div></section>
 <section><div class="wrap narrow">{lead_box("S corp calculator", "Is an S corp right for you?", "Send us your details and we will check the numbers for your business before you elect.")}</div></section>
 <script>(function(){{var SS=184500,$=function(i){{return document.getElementById(i)}},m=function(n){{return '$'+Math.round(n).toLocaleString('en-US')}};
 var B={{s:{{sd:16100,th:201775,ph:75000,am:200000,b:[[12400,.10],[50400,.12],[105700,.22],[201775,.24],[256225,.32],[640600,.35],[1e15,.37]]}},m:{{sd:32200,th:403550,ph:150000,am:250000,b:[[24800,.10],[100800,.12],[211400,.22],[403550,.24],[512450,.32],[768700,.35],[1e15,.37]]}}}};
 function tax(x,b){{var t=0,lo=0;for(var i=0;i<b.length;i++){{var hi=b[i][0];if(x>lo)t+=(Math.min(x,hi)-lo)*b[i][1];lo=hi}}return t}}
 function qbi(q,w2,ti,F,sstb){{q=Math.max(0,q);var d;if(ti<=F.th)d=.2*q;else{{var f=Math.min(1,(ti-F.th)/F.ph),ap=sstb?1-f:1;var t=.2*q*ap,wl=.5*w2*ap;d=f>=1?Math.min(t,wl):(wl<t?t-f*(t-wl):t);}}return Math.max(0,Math.min(d,.2*Math.max(0,ti)))}}
-function run(){{var F=B[$('sc-status').value],sstb=$('sc-type').value==='sstb',p=Math.max(0,+$('sc-profit').value||0),s=Math.max(0,+$('sc-salary').value||0),o=Math.max(0,+$('sc-other').value||0),c=Math.max(0,+$('sc-cost').value||0);if(s>p)s=p;
+function run(){{var F=B[$('sc-status').value],sstb=$('sc-type').value==='sstb',p=Math.max(0,+$('sc-profit').value||0),s=Math.max(0,+$('sc-salary').value||0),o=Math.max(0,+$('sc-other').value||0);if(s>p)s=p;
 var nb=p*0.9235,se=Math.min(nb,SS)*0.124+nb*0.029+Math.max(0,nb-F.am)*0.009;var ti1=Math.max(0,p+o-se/2-F.sd);var q1=qbi(p-se/2,0,ti1,F,sstb);var it1=tax(ti1-q1,F.b),t1=se+it1;
-var er=Math.min(s,SS)*0.062+s*0.0145,ee=Math.min(s,SS)*0.062+s*0.0145+Math.max(0,s-F.am)*0.009,futa=Math.min(s,7000)*0.006;var k1=p-s-er-futa-c;
-var ti2=Math.max(0,s+k1+o-F.sd);var q2=qbi(k1,s,ti2,F,sstb);var it2=tax(ti2-q2,F.b),t2=er+ee+futa+it2+c,v=t1-t2;
+var er=Math.min(s,SS)*0.062+s*0.0145,ee=Math.min(s,SS)*0.062+s*0.0145+Math.max(0,s-F.am)*0.009,futa=Math.min(s,7000)*0.006;var k1=p-s-er-futa;
+var ti2=Math.max(0,s+k1+o-F.sd);var q2=qbi(k1,s,ti2,F,sstb);var it2=tax(ti2-q2,F.b),t2=er+ee+futa+it2,v=t1-t2;
 $('sc-se').textContent=m(se);$('sc-it1').textContent=m(it1);$('sc-q1').textContent='after '+m(q1)+' QBI deduction';$('sc-t1').textContent=m(t1);
-$('sc-fica').textContent=m(er+ee+futa);$('sc-it2').textContent=m(it2);$('sc-q2').textContent='after '+m(q2)+' QBI deduction';$('sc-c').textContent=m(c);$('sc-t2').textContent=m(t2);
+$('sc-fica').textContent=m(er+ee+futa);$('sc-it2').textContent=m(it2);$('sc-q2').textContent='after '+m(q2)+' QBI deduction';$('sc-t2').textContent=m(t2);
 $('sc-save').textContent=v>0?m(v):'$0';
 $('sc-msg').textContent=v>=2000?'Worth looking into: an S corp could save you money.':v>0?'Savings look small. It may not be worth the extra work yet.':'At these numbers an S corp likely costs more than it saves.';}}
-['sc-status','sc-type','sc-profit','sc-salary','sc-other','sc-cost'].forEach(function(i){{$(i).addEventListener('input',run)}});run();}})();</script>""" + cta()
+['sc-status','sc-type','sc-profit','sc-salary','sc-other'].forEach(function(i){{$(i).addEventListener('input',run)}});run();}})();</script>""" + cta()
 
 def esttax_page():
     return tool_head("Quarterly Estimated Tax Calculator", "Self-employed or own a pass-through business? Estimate what you may owe the IRS for 2026 and what each quarterly payment should be.") + f'''

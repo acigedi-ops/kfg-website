@@ -794,3 +794,4 @@ section.promo-sec{padding:0 0 var(--sec)!important}
 .pk{position:relative}.pk input{pointer-events:none;top:0;left:0}
 .split-top h2+.intro{margin-top:18px}
 .to-sub{display:block;font-style:normal;font-size:.78rem;color:var(--muted-dk)}
+.to-note{font-size:.86rem;color:#C9D3E2;padding:12px 14px;border-radius:12px;background:rgba(255,190,90,.1);border:1px solid rgba(255,190,90,.25)}.to-note strong{color:#FFD08A}
