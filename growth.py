@@ -9,7 +9,7 @@ HOURS_PLAIN = "Mon-Fri, 9am-6pm"
 FORM_ACTION = f"mailto:{EMAIL}"
 FORM_ATTRS = ' method="post" enctype="text/plain"' if FORM_ACTION.startswith("mailto:") else ' method="post"'
 
-NAV.insert(4, ("tools", "Free tools"))
+NAV.insert(1, ("tools", "Free tools"))
 
 # ============================================================ 1. TECHNICAL SEO
 # Unique <title> and meta description per page (titles under ~60 chars, descriptions under ~160).
@@ -175,6 +175,7 @@ META.update({
  "tax-document-checklist": ("Tax Document Checklist: What to Bring (Printable) | KFG",
            "Printable checklist of documents for your personal or business tax return: W-2s, 1099s, deductions, business records and more."),
 })
+TOOL_SLUGS = [s for s, *_ in TOOLS]
 for s, t, _, _ in TOOLS:
     CRUMBS[s] = [("Free tools", "tools"), (t, s)]
 
@@ -191,7 +192,7 @@ TOOL_VIS = {
 
 PERKS = [("100% free", "No sign-up, no email required to use it"), ("Updated for 2026", "Current IRS brackets, limits and dates"), ("Private", "Your numbers stay in your browser")]
 def perks_strip():
-    ic = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
+    ic = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
     return '<section class="perks-sec"><div class="wrap"><div class="perks">' + "".join(f'<div class="perk"><span class="perk-ico">{ic}</span><div><strong>{t}</strong><span>{d}</span></div></div>' for t, d in PERKS) + '</div></div></section>'
 
 def tool_head(title, lead, kicker="Free tool"):
@@ -384,9 +385,9 @@ def tools_hub2():
     return f'''<section class="page-head split-head"><div class="glow g1"></div><div class="gridbg"></div>
 <div class="wrap ph-grid"><div><span class="pill-badge"><span class="dot"></span>Free, no sign-up</span><h1>Free tax and business tools</h1>
 <p class="lead">Calculators, a quiz and a printable checklist built by our team. Run the numbers yourself, then call us when you want a professional to look at your situation.</p>
-<div class="btns"><a class="btn" href="#tools">See the tools <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Call {PHONE}</a></div></div>
+<div class="btns"><a class="btn" href="#tool-list">See the tools <span class="arr">&darr;</span></a><a class="btn glass" href="tel:{PHONE_TEL}">Call {PHONE}</a></div></div>
 <div class="ph-visual">{vis}</div></div></section>''' + perks_strip() + f'''
-<section id="tools"><div class="wrap"><div class="sec-head"><span class="kicker">Tools</span><h2>Pick a tool</h2></div><div class="tool-grid">{cards}</div></div></section>
+<section id="tool-list"><div class="wrap"><div class="sec-head"><span class="kicker">Tools</span><h2>Pick a tool</h2></div><div class="tool-grid">{cards}</div></div></section>
 <section class="soft"><div class="wrap"><div class="sec-head"><span class="kicker">Who they're for</span><h2>Built for people who run their own business</h2></div><div class="grid g3">{wc}</div></div></section>
 <section><div class="wrap split-top"><div class="sticky-copy"><span class="kicker">Questions</span><h2>About these tools</h2></div>{faq_list(HUB_FAQ)}</div></section>''' + cta("Want real numbers, not estimates?", "Book a consultation and we'll run your actual situation.")
 PAGES["tools"] = ("Free tools", tools_hub2())

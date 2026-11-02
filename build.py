@@ -16,8 +16,8 @@ EMAIL = "info@kaplunfinancial.com"
 CITY = "Tukwila, WA"
 NAME = "Kaplun Financial Group"
 
-NAV = [("index", "Home"), ("about", "About"), ("services", "Services"),
-       ("industries", "Industries"), ("faq", "FAQ"), ("contact", "Contact")]
+# Header: Home is the logo; Contact is the Book a consultation button; Industries lives in the footer.
+NAV = [("services", "Services"), ("about", "About"), ("faq", "FAQ")]
 
 SERVICE_PAGES = [
     ("tax-preparation", "Tax Preparation", "Federal and state returns of every type, in all 50 states."),
@@ -42,7 +42,7 @@ ICONS = {
 }
 
 def icon(key):
-    return f'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[key]}</svg>'
+    return f'<svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ICONS[key]}</svg>'
 
 def card(title, text, ico=None, link=None):
     i = f'<div class="ico-wrap">{icon(ico)}</div>' if ico else ""
@@ -287,7 +287,7 @@ from faq_data import FAQ_CATS
 
 def faq_page():
     total = sum(len(q) for *_, q in FAQ_CATS)
-    search = '<div class="faq-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><label for="faq-q" class="sr">Search questions</label><input id="faq-q" type="search" placeholder="Search questions, e.g. LLC, extension, sales tax" autocomplete="off"></div>'
+    search = '<div class="faq-search"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><label for="faq-q" class="sr">Search questions</label><input id="faq-q" type="search" placeholder="Search questions, e.g. LLC, extension, sales tax" autocomplete="off"></div>'
     cats = f'<div class="faq-cats" role="tablist"><button class="on" data-cat="all">All <em>{total}</em></button>' + "".join(
         f'<button data-cat="{cid}">{label} <em>{len(qs)}</em></button>' for cid, label, _, qs in FAQ_CATS) + '</div>'
     groups = "".join(
@@ -326,9 +326,9 @@ PAGES["contact"] = ("Contact", page_head("Contact us", "Tell us what you need an
 </form></div>
 <div><h2>Reach us directly</h2>
 <div class="contact-item">{icon("person")}<div><strong>Phone</strong><br><a href="tel:{PHONE_TEL}">{PHONE}</a></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>Location</strong><br>{CITY}<br><span class="muted">Serving the greater Seattle area</span></div></div>
-<div class="contact-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>Mon&ndash;Fri, 9am&ndash;6pm</div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div><strong>Email</strong><br><a href="mailto:{EMAIL}">{EMAIL}</a></div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><div><strong>Location</strong><br>{CITY}<br><span class="muted">Serving the greater Seattle area</span></div></div>
+<div class="contact-item"><svg width="24" height="24" class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><strong>Hours</strong><br>Mon&ndash;Fri, 9am&ndash;6pm</div></div>
 </div></div></section>''')
 
 exec(open(os.path.join(ROOT, "pages_unique.py")).read())
@@ -336,11 +336,13 @@ exec(open(os.path.join(ROOT, "growth.py")).read())
 
 # ---------------------------------------------------------------- layout
 CSS = open(os.path.join(ROOT, "src", "styles.css")).read()
+import hashlib
+CSS_VER = hashlib.md5(CSS.encode()).hexdigest()[:8]  # cache-buster: browsers fetch new CSS after every change
 
 def nav_html(active):
     items = ""
     for slug, label in NAV:
-        cls = ' class="active"' if slug == active or (label == "Services" and active in [s for s, _, _ in SERVICE_PAGES]) else ""
+        cls = ' class="active"' if slug == active or (label == "Services" and active in [s for s, _, _ in SERVICE_PAGES]) or (slug == "tools" and active in TOOL_SLUGS) else ""
         items += f'<li><a href="{slug}.html"{cls}>{label}</a></li>'
     return items
 
@@ -384,9 +386,9 @@ def build_site():
     open(os.path.join(out, "styles.css"), "w").write(CSS)
     for slug, (title, body) in PAGES.items():
         body = body.replace('src="LOGO_DARK"', 'src="img/kfg-logo-dark-bg.png"')
-        html = layout(slug, title, body, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
+        html = layout(slug, title, body, "img/kfg-logo.png", f'<link rel="stylesheet" href="styles.css?v={CSS_VER}">', "img/kfg-logo-dark-bg.png") + SITE_JS
         open(os.path.join(out, f"{slug}.html"), "w").write(html)
-    nf = layout("404", "Page not found", NOT_FOUND, "img/kfg-logo.png", '<link rel="stylesheet" href="styles.css">', "img/kfg-logo-dark-bg.png") + SITE_JS
+    nf = layout("404", "Page not found", NOT_FOUND, "img/kfg-logo.png", f'<link rel="stylesheet" href="styles.css?v={CSS_VER}">', "img/kfg-logo-dark-bg.png") + SITE_JS
     nf = nf.replace('<meta name="robots" content="index,follow,max-image-preview:large">', '<meta name="robots" content="noindex">')
     nf = re.sub(r'(href|src)="(?!https?:|tel:|mailto:|#|/)([^"]+)"', r'\1="/\2"', nf)  # 404 can be served at any path
     open(os.path.join(out, "404.html"), "w").write(nf)
@@ -404,6 +406,7 @@ def build_preview():
         head, rest = full.split("<body>", 1)
         if shell is None:
             shell = head
+        rest = re.sub(r'href="#(start|tool-list)"', r'href="javascript:void(0)" data-scroll="\1"', rest)
         rest = re.sub(r'href="([a-z-]+)\.html"', lambda m: f'href="#{"home" if m.group(1)=="index" else m.group(1)}"', rest)
         pid = "home" if slug == "index" else slug
         pages_html += f'<div class="pv-page" data-page="{pid}" data-title="{_html.escape(page_title(slug, title), quote=True)}" hidden>{rest}</div>\n'
@@ -411,7 +414,7 @@ def build_preview():
 function show(){var id=(location.hash||'#home').slice(1);var pg=document.querySelector('[data-page="'+id+'"]')||document.querySelector('[data-page="home"]');
 document.querySelectorAll('.pv-page').forEach(function(p){p.hidden=p!==pg});document.title=pg.dataset.title;window.scrollTo({top:0,behavior:'instant'});}
 window.addEventListener('hashchange',show);show(); (function(){document.querySelectorAll('.hero-lines').forEach(function(c){var x=c.getContext('2d');function d(){var r=c.parentNode.getBoundingClientRect();if(!r.width)return;var dpr=window.devicePixelRatio||1;c.width=r.width*dpr;c.height=r.height*dpr;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,r.width,r.height); x.lineWidth=1;for(var i=0;i<22;i++){var off=i*34;x.strokeStyle='rgba(91,150,235,'+(0.05+0.18*(1-i/22))+')';x.beginPath();x.moveTo(r.width*0.52-off,r.height+20);x.lineTo(r.width*0.80-off*0.15,r.height*0.18+i*6);x.lineTo(r.width+40,r.height*0.48+i*14);x.stroke();}} d();window.addEventListener('resize',d);c._draw=d;});})(); window.addEventListener('hashchange',function(){document.querySelectorAll('.hero-lines').forEach(function(c){c._draw&&c._draw()})});
-document.addEventListener('click',function(e){var b=e.target.closest('.menu-btn');if(b){var o=document.body.classList.toggle('nav-open');b.setAttribute('aria-expanded',o);}
+document.addEventListener('click',function(e){var j=e.target.closest('[data-scroll]');if(j){var t=j.closest('.pv-page').querySelector('#'+j.dataset.scroll);if(t)t.scrollIntoView({behavior:'smooth'});return;}var b=e.target.closest('.menu-btn');if(b){var o=document.body.classList.toggle('nav-open');b.setAttribute('aria-expanded',o);}
 if(e.target.closest('.menu a')){document.body.classList.remove('nav-open');}});
 document.querySelectorAll('.year').forEach(function(e){e.textContent=new Date().getFullYear()});
 document.querySelectorAll('form').forEach(function(f){f.addEventListener('submit',function(e){e.preventDefault();var n=f.querySelector('.form-note');
