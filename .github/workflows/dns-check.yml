@@ -10,16 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          for d in kaplunfinancial.com www.kaplunfinancial.com; do
-            echo "== $d (Google 8.8.8.8)"; dig +noall +answer $d @8.8.8.8
-            echo "== $d (Cloudflare 1.1.1.1)"; dig +noall +answer $d @1.1.1.1
+          for u in / /favicon.ico /kfg-icon.svg /favicon.svg /img/apple-touch-icon.png /img/favicon-32.png; do
+            echo "== https://kaplunfinancial.com$u"; curl -sS -o /tmp/f -w "%{http_code} %{content_type} %{size_download}\n" "https://kaplunfinancial.com$u"
           done
-          echo "== NS"; dig +short NS kaplunfinancial.com @8.8.8.8
-          for ns in $(dig +short NS kaplunfinancial.com @8.8.8.8); do
-            echo "== authoritative $ns"; dig +noall +answer kaplunfinancial.com A @$ns; dig +noall +answer www.kaplunfinancial.com @$ns
-          done
-          echo "== AAAA"; dig +short AAAA kaplunfinancial.com @8.8.8.8
-          echo "== CAA"; dig +short CAA kaplunfinancial.com @8.8.8.8
-          echo "== HTTP root"; curl -sI http://kaplunfinancial.com | head -5
-          echo "== HTTP www"; curl -sI http://www.kaplunfinancial.com | head -5
-          echo "== HTTPS root"; curl -sI https://kaplunfinancial.com 2>&1 | head -5
+          curl -sS https://kaplunfinancial.com/ | grep -o '<link rel="[a-z-]*icon[^>]*>'
+          curl -sS https://www.kaplunfinancial.com/ -o /dev/null -w "www %{http_code} %{redirect_url}\n"
