@@ -100,7 +100,7 @@ def seo_head(slug, title):
 <meta property="og:image" content="{SITE_URL}/img/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(t)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{SITE_URL}/img/og-image.png">
 <meta name="geo.region" content="US-WA"><meta name="geo.placename" content="Tukwila">
-<link rel="icon" href="favicon.ico?v={ICON_VER}" sizes="32x32"><link rel="icon" type="image/svg+xml" href="kfg-icon.svg?v={ICON_VER}"><link rel="apple-touch-icon" href="img/apple-touch-icon.png?v={ICON_VER}"><link rel="manifest" href="site.webmanifest">
+<link rel="icon" href="favicon.ico?v={ICON_VER}" sizes="32x32"><link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png?v={ICON_VER}"><link rel="icon" type="image/svg+xml" href="kfg-icon.svg?v={ICON_VER}"><link rel="apple-touch-icon" href="img/apple-touch-icon.png?v={ICON_VER}"><link rel="manifest" href="site.webmanifest">
 ''' + "\n".join(_ld(x) for x in ld)
 
 BRAND_FILES = ["kfg-icon.svg", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "favicon.ico", "og-image.png"]
@@ -112,6 +112,8 @@ def make_brand_images(out_img):
         os.makedirs(src, exist_ok=True); draw_brand_images(src)
     for f in BRAND_FILES:
         shutil.copy(os.path.join(src, f), os.path.join(os.path.dirname(out_img) if f in ("favicon.ico", "kfg-icon.svg") else out_img, f))
+    # Browsers that cached the old /favicon.svg URL keep asking for it; serve the current icon there too.
+    shutil.copy(os.path.join(src, "kfg-icon.svg"), os.path.join(os.path.dirname(out_img), "favicon.svg"))
 
 def draw_brand_images(out_img):
     """Draw favicons + 1200x630 share image from the brand colors (needs Pillow and Inter fonts)."""
