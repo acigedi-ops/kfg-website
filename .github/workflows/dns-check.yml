@@ -1,25 +1,19 @@
 name: DNS check
-
 on:
   workflow_dispatch:
   push:
     paths: [".github/workflows/dns-check.yml"]
-
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          for d in kaplunfinancial.com www.kaplunfinancial.com; do
-            echo "== $d (Google 8.8.8.8)"; dig +noall +answer $d @8.8.8.8
-            echo "== $d (Cloudflare 1.1.1.1)"; dig +noall +answer $d @1.1.1.1
-          done
-          echo "== NS"; dig +short NS kaplunfinancial.com @8.8.8.8
-          for ns in $(dig +short NS kaplunfinancial.com @8.8.8.8); do
-            echo "== authoritative $ns"; dig +noall +answer kaplunfinancial.com A @$ns; dig +noall +answer www.kaplunfinancial.com @$ns
-          done
-          echo "== AAAA"; dig +short AAAA kaplunfinancial.com @8.8.8.8
+          echo "== www @8.8.8.8"; dig +noall +answer www.kaplunfinancial.com @8.8.8.8
+          echo "== www @1.1.1.1"; dig +noall +answer www.kaplunfinancial.com @1.1.1.1
+          echo "== apex"; dig +short A kaplunfinancial.com @8.8.8.8
           echo "== CAA"; dig +short CAA kaplunfinancial.com @8.8.8.8
-          echo "== HTTP root"; curl -sI http://kaplunfinancial.com | head -5
-          echo "== HTTP www"; curl -sI http://www.kaplunfinancial.com | head -5
-          echo "== HTTPS root"; curl -sI https://kaplunfinancial.com 2>&1 | head -5
+          for h in kaplunfinancial.com www.kaplunfinancial.com; do
+            echo "== cert $h"; echo | openssl s_client -connect $h:443 -servername $h 2>/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+          done
+          echo "== http www"; curl -sI http://www.kaplunfinancial.com | head -4
+          echo "== https www -k"; curl -skI https://www.kaplunfinancial.com | head -4
